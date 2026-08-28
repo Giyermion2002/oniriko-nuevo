@@ -5,16 +5,18 @@ import { Reveal } from "../components/Reveal";
 import { SectionHeader } from "../components/SectionHeader";
 import { galleryItems } from "../data/gallery";
 import { staggerContainer } from "../hooks/motion";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export const Gallery = () => {
+  const { t } = useLanguage();
   return (
     <Section id="galeria" tone="muted" spacing="lg">
       <Container>
         <Reveal>
           <SectionHeader
-            eyebrow="Galería"
-            title="Momentos que se saborean"
-            description="Una selección de instantes cotidianos en ONÍRIKO: del horno al café, del brunch a la sobremesa con quien más quieres."
+            eyebrow={t.gallery.eyebrow}
+            title={t.gallery.title}
+            description={t.gallery.description}
           />
         </Reveal>
 

@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu as MenuIcon, X } from "lucide-react";
 
-const links = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#nosotros", label: "Nosotros" },
-  { href: "#menu", label: "Menú" },
-  { href: "#galeria", label: "Galería" },
-  { href: "#productos", label: "Productos" },
-  { href: "#comunidad", label: "Comunidad" },
-];
+import { LanguageSelector } from "./LanguageSelector";
+import { useLanguage } from "../i18n/LanguageContext";
+
+const linkKeys = [
+  { href: "#inicio", key: "inicio" },
+  { href: "#nosotros", key: "nosotros" },
+  { href: "#menu", key: "menu" },
+  { href: "#galeria", key: "galeria" },
+  { href: "#productos", key: "productos" },
+  { href: "#comunidad", key: "comunidad" },
+] as const;
 
 export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -50,29 +54,22 @@ export const Navbar = () => {
         </a>
 
         <ul className="hidden lg:flex items-center gap-10">
-          {links.map((l) => (
+          {linkKeys.map((l) => (
             <li key={l.href}>
               <a
                 href={l.href}
                 className="text-xs font-medium uppercase tracking-widest text-espresso/70 transition-colors hover:text-espresso"
               >
-                {l.label}
+                {t.nav[l.key]}
               </a>
             </li>
           ))}
         </ul>
 
         <div className="hidden lg:flex items-center gap-4">
-          <button
-            type="button"
-            className="flex items-center gap-2 rounded-full border border-espresso/15 px-3 py-1.5 text-xs uppercase tracking-widest text-espresso/70 transition-colors hover:border-espresso hover:text-espresso"
-            aria-label="Cambiar idioma"
-          >
-            <span aria-hidden className="text-base">🇪🇸</span>
-            ES
-          </button>
+          <LanguageSelector />
           <a href="#contacto" className="btn-primary px-5 py-2 text-xs">
-            Reservar
+            {t.nav.reservar}
           </a>
         </div>
 
@@ -83,7 +80,7 @@ export const Navbar = () => {
           onClick={() => setOpen((v) => !v)}
           className="lg:hidden rounded-full p-2 text-espresso hover:bg-espresso/5"
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {open ? <X size={22} /> : <MenuIcon size={22} />}
         </button>
       </nav>
 
@@ -97,30 +94,25 @@ export const Navbar = () => {
             className="lg:hidden bg-cream-50 border-t border-espresso/5"
           >
             <ul className="container-editorial flex flex-col py-6">
-              {links.map((l) => (
+              {linkKeys.map((l) => (
                 <li key={l.href}>
                   <a
                     href={l.href}
                     onClick={() => setOpen(false)}
                     className="block py-3 text-sm uppercase tracking-widest text-espresso/80"
                   >
-                    {l.label}
+                    {t.nav[l.key]}
                   </a>
                 </li>
               ))}
-              <li className="pt-4 flex items-center gap-3">
-                <button
-                  type="button"
-                  className="flex items-center gap-2 rounded-full border border-espresso/15 px-3 py-1.5 text-xs uppercase tracking-widest text-espresso/70"
-                >
-                  <span aria-hidden className="text-base">🇪🇸</span> ES
-                </button>
+              <li className="pt-4 flex items-center justify-between gap-3">
+                <LanguageSelector variant="mobile" />
                 <a
                   href="#contacto"
                   onClick={() => setOpen(false)}
                   className="btn-primary px-5 py-2 text-xs"
                 >
-                  Reservar
+                  {t.nav.reservar}
                 </a>
               </li>
             </ul>

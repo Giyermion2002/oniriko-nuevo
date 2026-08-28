@@ -4,52 +4,29 @@ import { Coffee, Croissant, Wifi, Dog } from "lucide-react";
 import { Container, Section } from "../components/Layout";
 import { Reveal } from "../components/Reveal";
 import { staggerContainer } from "../hooks/motion";
-
-const highlights = [
-  {
-    icon: Coffee,
-    title: "Café de especialidad",
-    text: "Granos seleccionados, extracción cuidada y un ritual diario.",
-  },
-  {
-    icon: Croissant,
-    title: "Bakery cada mañana",
-    text: "Horno encendido al alba para ofrecerte bollería artesana.",
-  },
-  {
-    icon: Dog,
-    title: "Petfriendly",
-    text: "Porque las mejores sobremesas se comparten con quien quieres.",
-  },
-  {
-    icon: Wifi,
-    title: "Teletrabajo",
-    text: "Espacio tranquilo de lunes a viernes para trabajar sin prisa.",
-  },
-];
+import { useLanguage } from "../i18n/LanguageContext";
 
 export const About = () => {
+  const { t } = useLanguage();
+
+  const highlights = [
+    { icon: Coffee, ...t.about.highlights.cafe },
+    { icon: Croissant, ...t.about.highlights.bakery },
+    { icon: Dog, ...t.about.highlights.pet },
+    { icon: Wifi, ...t.about.highlights.wifi },
+  ];
+
   return (
     <Section id="nosotros" tone="default" spacing="lg">
       <Container>
         <div className="grid items-center gap-16 lg:grid-cols-[1.05fr_1fr]">
           <Reveal>
-            <p className="eyebrow">Filosofía</p>
+            <p className="eyebrow">{t.about.eyebrow}</p>
             <h2 className="heading-section mt-4 text-balance">
-              Soñando despiertos, una taza a la vez.
+              {t.about.title}
             </h2>
-            <p className="lead mt-6 text-balance">
-              Oníriko es mucho más que una cafetería. Somos ese lugar donde
-              vienes y te quedas. Por la calma, porque no hay prisa. Porque huele
-              a bakery casera recién horneada, porque nuestra pasión se transmite
-              desde que entras por la puerta.
-            </p>
-            <p className="body mt-4">
-              Contamos con opciones vegetarianas, veganas y sin gluten, aptas
-              para celíacos. Apostamos por productos de calidad y de cercanía, y
-              por lo casero. Cada mañana nuestro horno se enciende para tener a
-              punto la bakery para que vengáis a disfrutar.
-            </p>
+            <p className="lead mt-6 text-balance">{t.about.p1}</p>
+            <p className="body mt-4">{t.about.p2}</p>
 
             <motion.ul
               variants={staggerContainer(0.08, 0.2)}
@@ -58,7 +35,7 @@ export const About = () => {
               viewport={{ once: true, amount: 0.2 }}
               className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2"
             >
-              {highlights.map(({ icon: Icon, title, text }) => (
+              {highlights.map(({ icon: Icon, t: title, d: text }) => (
                 <motion.li
                   key={title}
                   variants={{
@@ -102,7 +79,7 @@ export const About = () => {
             </div>
             <div className="absolute -top-6 -right-6 hidden h-24 w-24 -rotate-12 rounded-full border border-espresso/15 sm:flex sm:items-center sm:justify-center">
               <span className="font-serif text-sm uppercase tracking-widest text-espresso/70">
-                Est. 2025
+                {t.about.stamp}
               </span>
             </div>
           </Reveal>

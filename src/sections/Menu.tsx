@@ -6,16 +6,18 @@ import { Reveal } from "../components/Reveal";
 import { SectionHeader } from "../components/SectionHeader";
 import { menu } from "../data/menu";
 import { staggerContainer } from "../hooks/motion";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export const Menu = () => {
+  const { t } = useLanguage();
   return (
     <Section id="menu" tone="default" spacing="lg">
       <Container>
         <Reveal>
           <SectionHeader
-            eyebrow="La carta"
-            title="Café, brunch y bakery sin prisas"
-            description="Una carta viva que cambia con la temporada. Trabajamos con producto local, opciones vegetarianas, veganas y sin gluten en casi todo."
+            eyebrow={t.menu.eyebrow}
+            title={t.menu.title}
+            description={t.menu.description}
           />
         </Reveal>
 

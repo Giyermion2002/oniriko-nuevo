@@ -2,12 +2,15 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 
+import { useLanguage } from "../i18n/LanguageContext";
+
 export const Hero = () => {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
+  const { t } = useLanguage();
 
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
@@ -42,7 +45,7 @@ export const Hero = () => {
           transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
           className="eyebrow text-sand"
         >
-          ONÍRIKO · Specialty Coffee · Avilés
+          {t.hero.eyebrow}
         </motion.p>
 
         <motion.h1
@@ -51,7 +54,7 @@ export const Hero = () => {
           transition={{ duration: 1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
           className="heading-display mt-6 max-w-5xl text-balance"
         >
-          Un cambio que va mucho más allá de una palabra.
+          {t.hero.title}
         </motion.h1>
 
         <motion.p
@@ -60,8 +63,7 @@ export const Hero = () => {
           transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
           className="lead mt-8 max-w-xl text-cream-100/80"
         >
-          Café de especialidad, desayunos, brunch y bakery horneada cada mañana.
-          Un lugar donde vienes, te quedas y no hay prisa.
+          {t.hero.description}
         </motion.p>
 
         <motion.div
@@ -71,14 +73,14 @@ export const Hero = () => {
           className="mt-10 flex flex-wrap items-center gap-4"
         >
           <a href="#menu" className="btn-primary">
-            Descubrir la carta
+            {t.hero.cta}
             <ArrowRight size={16} strokeWidth={1.75} />
           </a>
           <a
             href="#nosotros"
             className="btn border border-cream-100/30 text-cream-50 hover:border-cream-50 hover:bg-cream-50 hover:text-espresso"
           >
-            Nuestra historia
+            {t.hero.ctaSecondary}
           </a>
         </motion.div>
       </motion.div>

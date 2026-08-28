@@ -1,20 +1,20 @@
 import { Coffee, Instagram, Facebook, MapPin, Mail, Clock } from "lucide-react";
 
-const navLinks = [
-  { href: "#inicio", label: "Inicio" },
-  { href: "#nosotros", label: "Nosotros" },
-  { href: "#menu", label: "Menú" },
-  { href: "#galeria", label: "Galería" },
-  { href: "#productos", label: "Productos" },
-];
+import { useLanguage } from "../i18n/LanguageContext";
+
+const navKeys = [
+  { href: "#inicio", key: "inicio" },
+  { href: "#nosotros", key: "nosotros" },
+  { href: "#menu", key: "menu" },
+  { href: "#galeria", key: "galeria" },
+  { href: "#productos", key: "productos" },
+] as const;
 
 export const Footer = () => {
   const year = new Date().getFullYear();
+  const { t } = useLanguage();
   return (
-    <footer
-      id="contacto"
-      className="bg-espresso text-cream-100"
-    >
+    <footer id="contacto" className="bg-espresso text-cream-100">
       <div className="container-editorial py-20 sm:py-24">
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
@@ -25,8 +25,7 @@ export const Footer = () => {
               </span>
             </div>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-cream-100/70">
-              Café de especialidad, desayunos, brunch y bakery horneada cada
-              mañana en el corazón de Avilés.
+              {t.footer.tagline}
             </p>
             <div className="mt-6 flex items-center gap-3">
               <a
@@ -47,15 +46,15 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-serif text-lg text-cream-50">Navegación</h4>
+            <h4 className="font-serif text-lg text-cream-50">{t.footer.nav}</h4>
             <ul className="mt-5 space-y-3 text-sm text-cream-100/70">
-              {navLinks.map((l) => (
+              {navKeys.map((l) => (
                 <li key={l.href}>
                   <a
                     href={l.href}
                     className="transition-colors hover:text-sand"
                   >
-                    {l.label}
+                    {t.nav[l.key]}
                   </a>
                 </li>
               ))}
@@ -63,11 +62,13 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-serif text-lg text-cream-50">Contacto</h4>
+            <h4 className="font-serif text-lg text-cream-50">
+              {t.footer.contacto}
+            </h4>
             <ul className="mt-5 space-y-3 text-sm text-cream-100/70">
               <li className="flex items-start gap-3">
                 <MapPin size={16} className="mt-0.5 text-sand" strokeWidth={1.5} />
-                <span>Avilés, Asturias</span>
+                <span>{t.footer.address}</span>
               </li>
               <li className="flex items-start gap-3">
                 <Mail size={16} className="mt-0.5 text-sand" strokeWidth={1.5} />
@@ -82,13 +83,15 @@ export const Footer = () => {
           </div>
 
           <div>
-            <h4 className="font-serif text-lg text-cream-50">Horario</h4>
+            <h4 className="font-serif text-lg text-cream-50">
+              {t.footer.horario}
+            </h4>
             <ul className="mt-5 space-y-3 text-sm text-cream-100/70">
               <li className="flex items-start gap-3">
                 <Clock size={16} className="mt-0.5 text-sand" strokeWidth={1.5} />
                 <div>
-                  <p>Lun – Dom · 09:00 – 14:00</p>
-                  <p>Jue – Sáb · 17:00 – 20:00</p>
+                  <p>{t.footer.hours1}</p>
+                  <p>{t.footer.hours2}</p>
                 </div>
               </li>
             </ul>
@@ -96,9 +99,9 @@ export const Footer = () => {
         </div>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-cream-100/10 pt-8 text-xs uppercase tracking-widest text-cream-100/50 sm:flex-row sm:items-center">
-          <p>© {year} ONÍRIKO Specialty Coffee</p>
+          <p>{t.footer.rights(year)}</p>
           <p className="divider-editorial text-sand/70 sm:gap-3">
-            <span>Hecho con calma en Avilés</span>
+            <span>{t.footer.made}</span>
           </p>
         </div>
       </div>

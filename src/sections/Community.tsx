@@ -2,8 +2,10 @@ import { Cake } from "lucide-react";
 
 import { Container, Section } from "../components/Layout";
 import { Reveal } from "../components/Reveal";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export const Community = () => {
+  const { t } = useLanguage();
   return (
     <Section id="comunidad" tone="default" spacing="lg">
       <Container>
@@ -14,14 +16,12 @@ export const Community = () => {
               <span className="mx-auto mb-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-cream-50 text-espresso shadow-sm">
                 <Cake size={22} strokeWidth={1.5} />
               </span>
-              <p className="eyebrow">Próximamente</p>
+              <p className="eyebrow">{t.community.eyebrow}</p>
               <h2 className="heading-section mt-3 text-balance">
-                Algo especial se está horneando.
+                {t.community.title}
               </h2>
               <p className="lead mx-auto mt-5 max-w-xl text-balance">
-                Estamos preparando un rincón para la comunidad ONÍRIKO: club de
-                café, eventos exclusivos y mucho más. Déjanos tu email y te
-                avisamos antes que a nadie.
+                {t.community.description}
               </p>
 
               <form
@@ -31,15 +31,15 @@ export const Community = () => {
                 <input
                   type="email"
                   required
-                  placeholder="tu@email.com"
+                  placeholder={t.community.placeholder}
                   className="w-full rounded-full border border-espresso/15 bg-cream-50 px-5 py-3 text-sm text-espresso placeholder:text-espresso/40 focus:border-espresso focus:outline-none"
                 />
                 <button type="submit" className="btn-primary whitespace-nowrap">
-                  Avisadme
+                  {t.community.cta}
                 </button>
               </form>
               <p className="mt-4 text-xs uppercase tracking-widest text-espresso/40">
-                Sin spam, lo prometemos.
+                {t.community.note}
               </p>
             </div>
           </div>
