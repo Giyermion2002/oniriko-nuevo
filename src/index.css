@@ -9,19 +9,105 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    @apply bg-cream-50 text-espresso antialiased font-sans;
+    @apply bg-cream-50 text-espresso font-sans;
+    font-feature-settings: "ss01", "cv11";
   }
 
   h1, h2, h3, h4 {
-    @apply font-serif tracking-tight;
+    @apply font-serif tracking-tight text-espresso;
+  }
+
+  ::selection {
+    @apply bg-espresso text-cream-50;
+  }
+
+  /* Scrollbar discreta y coherente con la marca */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: theme("colors.cream.100");
+  }
+  ::-webkit-scrollbar-thumb {
+    background: theme("colors.sand.dark");
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: theme("colors.espresso.DEFAULT");
+  }
+}
+
+@layer components {
+  .container-editorial {
+    @apply mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12;
+  }
+
+  .container-narrow {
+    @apply mx-auto w-full max-w-3xl px-6 sm:px-8;
+  }
+
+  /* Eyebrow: etiqueta pequeña en mayúsculas con tracking ancho */
+  .eyebrow {
+    @apply inline-block text-xs font-medium uppercase tracking-widest text-sand-dark;
+  }
+
+  /* Heading editorial reutilizable */
+  .heading-display {
+    @apply font-serif text-4xl leading-[1.05] sm:text-5xl lg:text-7xl;
+  }
+  .heading-section {
+    @apply font-serif text-3xl leading-tight sm:text-4xl lg:text-5xl;
+  }
+  .heading-card {
+    @apply font-serif text-xl sm:text-2xl;
+  }
+
+  /* Cuerpo editorial */
+  .lead {
+    @apply text-base leading-relaxed text-espresso/80 sm:text-lg;
+  }
+  .body {
+    @apply text-sm leading-relaxed text-espresso/75 sm:text-base;
+  }
+
+  /* Botones */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium tracking-wide transition-all duration-300 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-espresso;
+  }
+  .btn-primary {
+    @apply btn bg-espresso text-cream-50 hover:bg-espresso-700 hover:-translate-y-0.5 hover:shadow-lg;
+  }
+  .btn-outline {
+    @apply btn border border-espresso/20 bg-transparent text-espresso hover:border-espresso hover:bg-espresso hover:text-cream-50;
+  }
+  .btn-ghost {
+    @apply btn text-espresso hover:text-espresso-700;
+  }
+
+  /* Divisor editorial: línea fina + diamante */
+  .divider-editorial {
+    @apply relative flex items-center justify-center gap-4 text-sand-dark;
+  }
+  .divider-editorial::before,
+  .divider-editorial::after {
+    content: "";
+    @apply h-px w-12 bg-current opacity-40;
   }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .bg-noise {
+    background-image: radial-gradient(rgba(42, 24, 16, 0.04) 1px, transparent 1px);
+    background-size: 3px 3px;
   }
 }
