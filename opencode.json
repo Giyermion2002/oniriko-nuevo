@@ -1,0 +1,139 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "filesystem": {
+      "type": "local",
+      "enabled": true,
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "C:\\Users\\Guille\\opencode",
+        "C:\\Users\\Guille",
+        "D:\\",
+        "E:\\",
+        "F:\\"
+      ],
+      "env": {}
+    },
+    "shell": {
+      "type": "local",
+      "enabled": true,
+      "command": [
+        "npx",
+        "-y",
+        "mcp-shell"
+      ],
+      "env": {}
+    },
+    "agent-memory": {
+      "type": "local",
+      "enabled": true,
+      "command": [
+        "node",
+        "C:\\Users\\Guille\\opencode\\.agent\\skills\\agent-memory\\out\\mcp-server\\server.js",
+        "opencode",
+        "C:\\Users\\Guille\\opencode"
+      ],
+      "env": {}
+    }
+  },
+  "command": {
+    "busca": {
+      "description": "Navegación web avanzada, búsqueda de información y extracción de datos mediante Chrome Headless",
+      "template": "Eres un agente con acceso a internet mediante Playwright. Cuando se te pida buscar algo o visitar una web: 1. Utiliza 'browser_navigate' para ir a la URL. 2. Si hay banners de cookies, usa 'browser_click' para quitarlos. 3. Usa 'browser_snapshot' para analizar la página. 4. Extrae la información con precisión. Responde siempre en español."
+    },
+    "archivos": {
+      "description": "Explorar y leer archivos del disco duro",
+      "template": "Tienes acceso de lectura y escritura a ciertas carpetas del PC del usuario a través de Filesystem MCP. Puedes listar directorios, leer el contenido de archivos de código o logs, y crear archivos nuevos si se te pide. Respeta siempre las rutas permitidas."
+    },
+    "terminal": {
+      "description": "Ejecutar comandos en la consola del PC",
+      "template": "Tienes acceso a una terminal en el PC del usuario mediante Shell MCP. Puedes ejecutar comandos de PowerShell o CMD. Úsalo para levantar servidores, instalar paquetes npm/pip, monitorizar recursos del sistema o manipular procesos. Antes de ejecutar comandos destructivos o instalaciones pesadas, pide confirmación."
+    },
+    "rendimiento": {
+      "description": "Monitorizar el uso de CPU, RAM y estado del PC",
+      "template": "Tienes acceso a leer las métricas de hardware del PC del usuario mediante el MCP de System Monitor. Úsalo para obtener información del sistema operativo, evaluar la carga de la CPU por cada núcleo o ver la memoria RAM ocupada y libre en tiempo real. Presenta los datos de forma clara."
+    },
+    "imagen": {
+      "description": "Generador de imágenes ultra-detallado actuando como Prompt Engineer y Director de Fotografía",
+      "template": "Cuando el usuario use /imagen: 1. Actúa como un Prompt Engineer de élite. 2. Traduce y estructura el prompt en inglés usando esta anatomía estricta: [Sujeto hiperdetallado] + [Composición y Encuadre] + [Cámara/Lente] + [Esquema de Iluminación] + [Motor de Render/Técnica] + [Boosters de Calidad]. 3. Inyecta jerga técnica profunda de forma autónoma. Para fotorealismo usa: 'Shot on ARRI Alexa 65' o 'Sony A7R IV', 'f/1.2 aperture', 'macro lens' o '14mm wide angle', 'shallow depth of field', 'Rembrandt lighting', 'volumetric god rays', 'specular highlights'. Para digital/3D añade: 'Unreal Engine 5', 'Lumen reflections', 'Nanite geometry', 'Octane Render', 'ambient occlusion', 'PBR materials', 'path-traced'. 4. Cierra siempre con boosters de máxima calidad: 'masterpiece', 'award-winning', '8k resolution', 'hyper-detailed', 'crisp sharpness'. 5. Reemplaza los espacios por '%20'. 6. Usa Shell MCP para ejecutar en PowerShell: `Invoke-WebRequest -Uri 'https://image.pollinations.ai/prompt/[URL_PROMPT]' -OutFile 'C:\\Users\\Guille\\Desktop\\imagen_ia.jpg'`. 7. Muestra al usuario el prompt técnico exacto que has generado."
+    },
+    "video": {
+      "description": "Generador avanzado de vídeo multi-escena con Pexels y FFmpeg",
+      "template": "Cuando el usuario use /video: 1. Si el usuario te pasa un guion estructurado por escenas, respétalo. Si no, créalo tú. 2. Extrae para cada escena el 'texto' a locutar y una frase corta de 'tags' clave en INGLÉS para el stock (ej: 'dark lighthouse storm'). 3. Usa el MCP Filesystem para CREAR un archivo en 'C:\\Users\\Guille\\Desktop\\VideoBot\\guion.json' con la siguiente estructura de array JSON estricta: [{\"texto\": \"...\", \"tags\": \"...\"}, {\"texto\": \"...\", \"tags\": \"...\"}]. 4. Usa el MCP Shell para ejecutar: `node C:\\Users\\Guille\\Desktop\\VideoBot\\generador.mjs --archivo \"C:\\Users\\Guille\\Desktop\\VideoBot\\guion.json\"`. 5. Confirma cuando termine."
+    },
+    "keepass": {
+      "description": "Gestión autónoma de contraseñas, credenciales y tokens mediante KeePassXC",
+      "template": "Tienes acceso a la bóveda local de KeePassXC del usuario a través de MCP. Si necesitas credenciales para ejecutar un script, conectarte a una base de datos o si el usuario te pide crear/buscar una contraseña, utiliza las herramientas de keepassxc. Reglas de seguridad estrictas: 1. NO imprimas las contraseñas en texto plano en el chat a menos que el usuario lo solicite explícitamente. 2. Inyecta las credenciales recuperadas directamente en los archivos de configuración, variables de entorno o comandos que estés construyendo. 3. Si creas un nuevo servicio, genera tú mismo una contraseña robusta y guárdala en la bóveda de forma autónoma. 4. Si la herramienta falla por conexión, avisa de que la bóveda debe estar desbloqueada y la conexión autorizada en la aplicación de escritorio."
+    }
+  },
+  "lsp": {
+    "json": {
+      "command": [
+        "vscode-json-languageserver",
+        "--stdio"
+      ],
+      "extensions": [
+        ".json"
+      ]
+    },
+    "yaml": {
+      "command": [
+        "yaml-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".yaml",
+        ".yml"
+      ]
+    },
+    "python": {
+      "command": [
+        "pyright-langserver",
+        "--stdio"
+      ],
+      "extensions": [
+        ".py"
+      ]
+    },
+    "bash": {
+      "command": [
+        "bash-language-server",
+        "start"
+      ],
+      "extensions": [
+        ".sh",
+        ".bash"
+      ]
+    },
+    "typescript": {
+      "command": [
+        "typescript-language-server",
+        "--stdio"
+      ],
+      "extensions": [
+        ".ts",
+        ".js"
+      ]
+    }
+  },
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen2.5-coder:14b": {
+          "name": "Qwen 2.5 Coder 14B (local)",
+          "tools": true
+        },
+        "deepseek-r1:14b": {
+          "tools": true
+        }
+      }
+    }
+  }
+}
