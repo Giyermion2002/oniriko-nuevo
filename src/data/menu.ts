@@ -21,7 +21,7 @@ export const menu: MenuCategory[] = [
     title: "El ritual de cada mañana",
     description:
       "Granos seleccionados de microlotes, extracción precisa y un menú cambiante de filtros y espresso.",
-    cover: "/img/img12.jpeg",
+    cover: "/img/carta/carta_img1.jpeg",
     products: [
       { name: "Espresso", description: "Doble, limpio y persistente.", price: "2,20€" },
       { name: "Cappuccino", description: "Textura sedosa, equilibrio clásico.", price: "3,20€" },

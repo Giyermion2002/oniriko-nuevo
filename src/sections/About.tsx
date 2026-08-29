@@ -63,19 +63,20 @@ export const About = () => {
           <Reveal variant="scale-in" className="relative">
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg">
               <img
-                src="/img/img8.jpeg"
-                alt="Detalle de un café en ONÍRIKO"
+                src="/img/brunch/brunch_img2.jpeg"
+                alt="Detalle de brunch en ONÍRIKO"
                 className="h-full w-full object-cover"
               />
             </div>
             <div className="absolute -bottom-10 -left-10 hidden w-2/3 overflow-hidden rounded-lg shadow-xl sm:block">
               <div className="relative aspect-[4/5]">
                 <img
-                  src="/img/img11.jpeg"
-                  alt="Interior de la cafetería"
+                  src="/img/bakery_propia/bakery_propia_img4.jpeg"
+                  alt="Bakery artesana recién horneada"
                   className="h-full w-full object-cover"
                 />
               </div>
+            </div>
             </div>
             <div className="absolute -top-6 -right-6 hidden h-24 w-24 -rotate-12 rounded-full border border-espresso/15 sm:flex sm:items-center sm:justify-center">
               <span className="font-serif text-sm uppercase tracking-widest text-espresso/70">

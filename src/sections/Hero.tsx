@@ -21,19 +21,19 @@ export const Hero = () => {
       id="inicio"
       className="relative isolate min-h-[100svh] overflow-hidden bg-espresso text-cream-50"
     >
-      <motion.div
-        style={{ y }}
-        className="absolute inset-0 -z-10"
-        aria-hidden
-      >
-        <img
-          src="/img/img5.jpeg"
-          alt=""
-          className="h-full w-full object-cover scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-espresso/70 via-espresso/55 to-espresso/85" />
-        <div className="absolute inset-0 bg-noise opacity-30" />
-      </motion.div>
+        <motion.div
+          style={{ y }}
+          className="absolute inset-0 -z-10"
+          aria-hidden
+        >
+          <img
+            src="/img/img1.jpeg"
+            alt="ONÍRIKO Specialty Coffee"
+            className="h-full w-full object-cover scale-110"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-espresso/70 via-espresso/55 to-espresso/85" />
+          <div className="absolute inset-0 bg-noise opacity-30" />
+        </motion.div>
 
       <motion.div
         style={{ opacity }}
