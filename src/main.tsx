@@ -1,15 +1,13 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { HelmetProvider } from "react-helmet-async";
 import "./index.css";
-import App from "./App.tsx";
-import { LanguageProvider } from "./i18n/LanguageContext.tsx";
-import { ScrollToTop } from "./components/ScrollToTop.tsx";
+import Main from "./Main";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <LanguageProvider>
-      <App />
-      <ScrollToTop />
-    </LanguageProvider>
+    <HelmetProvider>
+      <Main />
+    </HelmetProvider>
   </StrictMode>,
 );
