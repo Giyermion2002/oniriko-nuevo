@@ -6,6 +6,12 @@ export const locales: { code: Locale; label: string; flag: string }[] = [
 ];
 
 export type Dictionary = {
+  seo: {
+    title: string;
+    description: string;
+    ogTitle: string;
+    ogDescription: string;
+  };
   nav: { inicio: string; nosotros: string; menu: string; galeria: string; productos: string; comunidad: string; reservar: string };
   hero: { eyebrow: string; title: string; description: string; cta: string; ctaSecondary: string };
   about: { eyebrow: string; title: string; p1: string; p2: string; highlights: { cafe: { t: string; d: string }; bakery: { t: string; d: string }; pet: { t: string; d: string }; wifi: { t: string; d: string } }; stamp: string };
@@ -20,6 +26,12 @@ export type Dictionary = {
 
 export const dictionaries: Record<Locale, Dictionary> = {
   es: {
+    seo: {
+      title: "ONÍRIKO | Café de Especialidad, Brunch y Bakery en Avilés",
+      description: "Descubre la mejor experiencia de café de especialidad en Avilés, Asturias. Brunch artesano, bakery recién horneada y un espacio diseñado para disfrutar sin prisas.",
+      ogTitle: "ONÍRIKO · Especialistas en Café y Bakery en Avilés",
+      ogDescription: "Siente el aroma de la bakery casera y el sabor del café de especialidad. El rincón más acogedor de Avilés para desayunar y teletrabajar.",
+    },
     nav: {
       inicio: "Inicio",
       nosotros: "Nosotros",
@@ -117,6 +129,12 @@ export const dictionaries: Record<Locale, Dictionary> = {
     schedule: { weekdays: "Lunes a Domingo", openHours: "09:00 – 14:00", evenings: "Jue – Sáb · 17:00 – 20:00" },
   },
   en: {
+    seo: {
+      title: "ONÍRIKO | Specialty Coffee, Brunch & Bakery in Avilés",
+      description: "Experience the finest specialty coffee in Avilés, Asturias. Artisan brunch, fresh bakery, and a welcoming space to enjoy your morning without rush.",
+      ogTitle: "ONÍRIKO · Specialty Coffee & Bakery Experts in Avilés",
+      ogDescription: "Feel the aroma of homemade bakery and the taste of specialty coffee. The most cozy spot in Avilés for breakfast and remote work.",
+    },
     nav: {
       inicio: "Home",
       nosotros: "About",
