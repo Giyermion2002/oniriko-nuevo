@@ -77,7 +77,6 @@ export const About = () => {
                 />
               </div>
             </div>
-            </div>
             <div className="absolute -top-6 -right-6 hidden h-24 w-24 -rotate-12 rounded-full border border-espresso/15 sm:flex sm:items-center sm:justify-center">
               <span className="font-serif text-sm uppercase tracking-widest text-espresso/70">
                 {t.about.stamp}

@@ -26,7 +26,7 @@ export const Contact = () => {
                   <p className="font-serif text-base text-espresso">
                     {t.footer.address}
                   </p>
-                  <p>Calle · 33401 · España</p>
+                  <p>Avilés, Asturias · España</p>
                 </div>
               </li>
               <li className="flex items-start gap-3">
@@ -51,7 +51,20 @@ export const Contact = () => {
             </ul>
           </Reveal>
 
-          <Reveal delay={0.1}>
+          <Reveal delay={0.1} className="flex flex-col gap-8">
+            <div className="relative overflow-hidden rounded-2xl border border-espresso/10 shadow-2xl">
+              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-multiply opacity-20 bg-espresso" />
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2915.6435245348!2d-5.5468!3d43.5433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2zNDMsMzIuNjB4N1SUIC01LTMyLzU4IIdS!5e0!3m2!1ses!2ses!4v1700000000000"
+                  className="h-[300px] w-full grayscale-[30%] contrast-[1.1] invert-[0] transition-all duration-500 hover:grayscale-0"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Ubicación de ONÍRIKO Specialty Coffee"
+                />
+            </div>
+
             <form
               onSubmit={(e) => e.preventDefault()}
               className="rounded-lg border border-espresso/10 bg-cream-50 p-8 shadow-sm sm:p-10"

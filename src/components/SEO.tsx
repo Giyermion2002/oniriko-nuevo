@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet-async";
-import { useLanguage } from "./LanguageContext";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export const SEO = () => {
   const { t, locale } = useLanguage();
