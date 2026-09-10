@@ -15,6 +15,8 @@ export const Contact = () => {
     reason: "",
     message: "",
   });
+  const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+  const [isSending, setIsSending] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
