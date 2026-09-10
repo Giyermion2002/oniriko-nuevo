@@ -33,6 +33,7 @@ export const galleryItems: GalleryItem[] = [
   {
     src: "/img/brunch/brunch_img5.jpeg",
     alt: "Tostadas de aguacate",
+    caption: "Tostadas frescas",
     category: "brunch",
   },
   {
@@ -44,21 +45,25 @@ export const galleryItems: GalleryItem[] = [
   {
     src: "/img/bakery_propia/bakery_propia_img3.jpeg",
     alt: "Croissant dorado",
+    caption: "Dorado perfecto",
     category: "bakery",
   },
   {
     src: "/img/carta/carta_img3.jpeg",
     alt: "Filtro de especialidad",
+    caption: "Aroma intenso",
     category: "cafe",
   },
   {
     src: "/img/pet_friendly/pet_friendly_img5.jpeg",
     alt: "Amigo de 4 patas",
+    caption: "Siempre bienvenidos",
     category: "pet",
   },
   {
     src: "/img/brunch/brunch_img6.jpeg",
     alt: "Plato de brunch",
+    caption: "Desayunos completos",
     category: "brunch",
   },
   {
@@ -70,6 +75,7 @@ export const galleryItems: GalleryItem[] = [
   {
     src: "/img/eventos/eventos_img5.jpeg",
     alt: "Detalle interior",
+    caption: "Cada detalle cuenta",
     category: "espacio",
   },
 ];

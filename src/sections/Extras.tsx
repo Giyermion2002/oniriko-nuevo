@@ -12,7 +12,7 @@ export const Extras = () => {
         <Container>
           <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_1fr]">
             <Reveal>
-              <p className="eyebrow text-sand">{t.extras.cateringEyebrow}</p>
+              <p className="eyebrow text-sand-dark">{t.extras.cateringEyebrow}</p>
               <h2 className="heading-section mt-4 text-cream-50 text-balance">
                 {t.extras.cateringTitle}
               </h2>

@@ -31,7 +31,7 @@ export const Hero = () => {
             alt="ONÍRIKO Specialty Coffee"
             className="h-full w-full object-cover scale-110"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-espresso/70 via-espresso/55 to-espresso/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-espresso/90 via-espresso/40 to-espresso/80" />
           <div className="absolute inset-0 bg-noise opacity-30" />
         </motion.div>
 
@@ -43,7 +43,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="eyebrow text-sand"
+          className="eyebrow bg-espresso/40 backdrop-blur-sm px-3 py-1 rounded-full text-sand border border-espresso/10 shadow-sm w-fit"
         >
           {t.hero.eyebrow}
         </motion.p>
@@ -52,7 +52,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="heading-display mt-6 max-w-5xl text-balance"
+          className="heading-display mt-6 max-w-5xl text-balance text-cream-50 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
         >
           {t.hero.title}
         </motion.h1>
@@ -61,7 +61,7 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="lead mt-8 max-w-xl text-cream-100/80"
+          className="lead mt-8 max-w-xl text-cream-100/90 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
         >
           {t.hero.description}
         </motion.p>

@@ -10,8 +10,6 @@ const linkKeys = [
   { href: "#nosotros", key: "nosotros" },
   { href: "#menu", key: "menu" },
   { href: "#galeria", key: "galeria" },
-  { href: "#productos", key: "productos" },
-  { href: "#comunidad", key: "comunidad" },
 ] as const;
 
 export const Navbar = () => {
@@ -40,25 +38,29 @@ export const Navbar = () => {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-cream-50/90 backdrop-blur-md border-b border-espresso/5"
-          : "bg-transparent"
+          ? "bg-cream-50/95 backdrop-blur-md border-b border-espresso/5 py-3"
+          : "bg-espresso/20 backdrop-blur-lg py-5"
       }`}
     >
       <nav className="container-editorial flex h-20 items-center justify-between">
         <a
           href="#inicio"
-          className="font-serif text-xl tracking-[0.2em] text-espresso"
+          className={`font-serif text-xl tracking-[0.2em] transition-colors duration-500 ${
+            scrolled ? "text-espresso" : "text-cream-50"
+          }`}
           aria-label="ONÍRIKO · Inicio"
         >
           ONÍRIKO
         </a>
 
-        <ul className="hidden lg:flex items-center gap-10">
+        <ul className={`hidden lg:flex items-center gap-10 transition-colors duration-500 ${
+          scrolled ? "text-espresso" : "text-cream-50"
+        }`}>
           {linkKeys.map((l) => (
             <li key={l.href}>
               <a
                 href={l.href}
-                className="text-xs font-medium uppercase tracking-widest text-espresso/70 transition-colors hover:text-espresso"
+                className="text-xs font-medium uppercase tracking-widest transition-colors hover:text-sand"
               >
                 {t.nav[l.key]}
               </a>
@@ -67,7 +69,7 @@ export const Navbar = () => {
         </ul>
 
         <div className="hidden lg:flex items-center gap-4">
-          <LanguageSelector />
+          <LanguageSelector scrolled={scrolled} />
           <a href="#contacto" className="btn-primary px-5 py-2 text-xs">
             {t.nav.reservar}
           </a>
@@ -106,7 +108,7 @@ export const Navbar = () => {
                 </li>
               ))}
               <li className="pt-4 flex items-center justify-between gap-3">
-                <LanguageSelector variant="mobile" />
+                <LanguageSelector variant="mobile" scrolled={scrolled} />
                 <a
                   href="#contacto"
                   onClick={() => setOpen(false)}

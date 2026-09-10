@@ -8,21 +8,21 @@ export default {
     extend: {
       colors: {
         cream: {
-          50: "#FBF8F4",
-          100: "#F5EFE6",
-          200: "#EBE2D2",
+          50: "#FDFDFB",
+          100: "#F7F5F0",
+          200: "#EBE6D8",
         },
         espresso: {
-          DEFAULT: "#2A1810",
-          900: "#1A0E08",
-          800: "#2A1810",
-          700: "#3A2418",
-          600: "#5A3A28",
+          DEFAULT: "#1A0E08",
+          900: "#0D0604",
+          800: "#1A0E08",
+          700: "#2A1810",
+          600: "#4A2D22",
         },
         sand: {
-          DEFAULT: "#C8A882",
-          light: "#D9C2A6",
-          dark: "#A88A65",
+          DEFAULT: "#B8966A",
+          light: "#CFC0B0",
+          dark: "#8C724D",
         },
         sage: {
           DEFAULT: "#7C8C6E",

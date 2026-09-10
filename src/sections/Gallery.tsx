@@ -59,7 +59,7 @@ export const Gallery = () => {
                 />
                 {item.caption && (
                   <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-espresso/85 via-espresso/40 to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                    <span className="eyebrow text-sand">
+                    <span className="eyebrow text-sand-dark">
                       {item.category}
                     </span>
                     <p className="mt-1 font-serif text-lg text-cream-50">

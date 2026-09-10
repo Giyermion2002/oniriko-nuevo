@@ -31,7 +31,7 @@ export const SectionHeader = ({
   return (
     <header className={`max-w-3xl ${alignment} mb-12 sm:mb-16`}>
       {eyebrow && (
-        <Eyebrow className={invert ? "text-sand" : ""}>{eyebrow}</Eyebrow>
+        <Eyebrow className={invert ? "text-sand-dark" : ""}>{eyebrow}</Eyebrow>
       )}
       <h2
         className={`heading-section mt-4 text-balance ${titleColor}`}

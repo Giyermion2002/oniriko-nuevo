@@ -8,7 +8,6 @@ import { About } from "./sections/About";
 import { Menu } from "./sections/Menu";
 import { Extras } from "./sections/Extras";
 import { Gallery } from "./sections/Gallery";
-import { Community } from "./sections/Community";
 import { Contact } from "./sections/Contact";
 
 const App: FC = () => {
@@ -22,7 +21,6 @@ const App: FC = () => {
         <Menu />
         <Extras />
         <Gallery />
-        <Community />
         <Contact />
       </main>
       <Footer />

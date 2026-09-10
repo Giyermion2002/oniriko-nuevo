@@ -1,4 +1,6 @@
-import { Mail, MapPin, Clock, Phone } from "lucide-react";
+import { useState } from "react";
+import { Mail, MapPin, Clock, Phone, Instagram } from "lucide-react";
+import emailjs from "@emailjs/browser";
 
 import { Container, Section } from "../components/Layout";
 import { Reveal } from "../components/Reveal";
@@ -6,6 +8,34 @@ import { useLanguage } from "../i18n/LanguageContext";
 
 export const Contact = () => {
   const { t } = useLanguage();
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    reason: "",
+    message: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const phoneNum = "34634539806";
+    const message = `Hola Oníriko! 👋%0A%0A${t.contact.description}%0A%0A` + 
+                    `*Nombre*: ${encodeURIComponent(formData.name)}%0A` +
+                    `*Email*: ${encodeURIComponent(formData.email)}%0A` +
+                    `*Teléfono*: ${encodeURIComponent(formData.phone)}%0A` +
+                    `*Motivo*: ${encodeURIComponent(formData.reason)}%0A` +
+                    `*Mensaje*: ${encodeURIComponent(formData.message)}%0A%0A` +
+                    `¡Espero vuestra respuesta!`;
+
+    window.open(`https://wa.me/${phoneNum}?text=${message}`, "_blank");
+  };
+
   return (
     <Section id="contacto" tone="muted" spacing="lg">
       <Container>
@@ -26,19 +56,32 @@ export const Contact = () => {
                   <p className="font-serif text-base text-espresso">
                     {t.footer.address}
                   </p>
-                  <p>Avilés, Asturias · España</p>
+                  <a 
+                    href="https://www.google.com/maps/search/?api=1&query=Oniriko+Specialty+Coffee+Aviles" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-xs text-sand-dark underline hover:text-espresso transition-colors"
+                  >
+                    Ver Mapa
+                  </a>
                 </div>
               </li>
               <li className="flex items-start gap-3">
                 <Mail size={18} className="mt-0.5 text-sand-dark" strokeWidth={1.5} />
-                <a href="mailto:hola@oniriko.es" className="hover:text-espresso">
-                  hola@oniriko.es
+                <a href="mailto:Onirikocoffee@gmail.com" className="hover:text-espresso">
+                  Onirikocoffee@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Phone size={18} className="mt-0.5 text-sand-dark" strokeWidth={1.5} />
-                <a href="tel:+34000000000" className="hover:text-espresso">
-                  +34 000 000 000
+                <a href="tel:+34984831376" className="hover:text-espresso">
+                  Teléfono: 984831376
+                </a>
+              </li>
+              <li className="flex items-start gap-3">
+                <Instagram size={18} className="mt-0.5 text-sand-dark" strokeWidth={1.5} />
+                <a href="https://instagram.com/onirikocoffee" target="_blank" rel="noopener noreferrer" className="hover:text-espresso">
+                  @onirikocoffee
                 </a>
               </li>
               <li className="flex items-start gap-3">
@@ -53,10 +96,9 @@ export const Contact = () => {
 
           <Reveal delay={0.1} className="flex flex-col gap-8">
             <div className="relative overflow-hidden rounded-2xl border border-espresso/10 shadow-2xl">
-              <div className="absolute inset-0 z-10 pointer-events-none mix-blend-multiply opacity-20 bg-espresso" />
                 <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2915.6435245348!2d-5.5468!3d43.5433!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0:0x0!2zNDMsMzIuNjB4N1SUIC01LTMyLzU4IIdS!5e0!3m2!1ses!2ses!4v1700000000000"
-                  className="h-[300px] w-full grayscale-[30%] contrast-[1.1] invert-[0] transition-all duration-500 hover:grayscale-0"
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d361.43097668829995!2d-5.923179246846271!3d43.55555111655372!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd369b7638d8a361%3A0xb4c756204147ff49!2sOn%C3%ADriko%20Specialty%20coffee!5e0!3m2!1ses!2ses!4v1789051190834!5m2!1ses!2ses"
+                  className="h-[300px] w-full transition-all duration-500 hover:grayscale-0"
                   style={{ border: 0 }}
                   allowFullScreen
                   loading="lazy"
@@ -66,27 +108,52 @@ export const Contact = () => {
             </div>
 
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
               className="rounded-lg border border-espresso/10 bg-cream-50 p-8 shadow-sm sm:p-10"
             >
+              {status && (
+                <div className={`mb-6 p-3 rounded-md text-sm text-center ${
+                  status.type === "success" 
+                    ? "bg-green-100 text-green-800 border border-green-200" 
+                    : "bg-red-100 text-red-800 border border-red-200"
+                }`}>
+                  {status.message}
+                </div>
+              )}
               <div className="grid gap-5 sm:grid-cols-2">
-                <Field label={t.contact.fields.name} name="name" placeholder="…" />
+                <Field 
+                  label={t.contact.fields.name} 
+                  name="name" 
+                  placeholder="…" 
+                  value={formData.name} 
+                  onChange={handleInputChange} 
+                  required 
+                />
                 <Field
                   label={t.contact.fields.email}
                   type="email"
                   name="email"
-                  placeholder="…"
+                  placeholder="…" 
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
                 />
                 <Field
                   label={t.contact.fields.phone}
                   type="tel"
                   name="phone"
-                  placeholder="+34 …"
+                  placeholder="+34 …" 
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
                 />
                 <Field
                   label={t.contact.fields.reason}
                   name="reason"
-                  placeholder="…"
+                  placeholder="…" 
+                  value={formData.reason}
+                  onChange={handleInputChange}
+                  required
                 />
               </div>
               <div className="mt-5">
@@ -97,11 +164,17 @@ export const Contact = () => {
                   rows={5}
                   name="message"
                   placeholder="…"
+                  value={formData.message}
+                  onChange={handleInputChange}
                   className="mt-2 w-full rounded-md border border-espresso/15 bg-cream-50 px-4 py-3 text-sm text-espresso placeholder:text-espresso/40 focus:border-espresso focus:outline-none"
                 />
               </div>
-              <button type="submit" className="btn-primary mt-8 w-full sm:w-auto">
-                {t.contact.fields.send}
+              <button 
+                type="submit" 
+                disabled={isSending}
+                className="btn-primary mt-8 w-full sm:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isSending ? "Enviando..." : t.contact.fields.send}
               </button>
             </form>
           </Reveal>
@@ -116,21 +189,27 @@ type FieldProps = {
   name: string;
   type?: string;
   placeholder?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
 };
 
-const Field = ({ label, name, type = "text", placeholder }: FieldProps) => (
+const Field = ({ label, name, type = "text", placeholder, value, onChange, required }: FieldProps) => (
   <div>
     <label
       htmlFor={name}
       className="block text-xs uppercase tracking-widest text-espresso/60"
     >
-      {label}
+      {label} {required && <span className="text-red-500">*</span>}
     </label>
     <input
       id={name}
       name={name}
       type={type}
       placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      required={required}
       className="mt-2 w-full rounded-md border border-espresso/15 bg-cream-50 px-4 py-3 text-sm text-espresso placeholder:text-espresso/40 focus:border-espresso focus:outline-none"
     />
   </div>

@@ -7,7 +7,6 @@ const navKeys = [
   { href: "#nosotros", key: "nosotros" },
   { href: "#menu", key: "menu" },
   { href: "#galeria", key: "galeria" },
-  { href: "#productos", key: "productos" },
 ] as const;
 
 export const Footer = () => {
@@ -19,7 +18,7 @@ export const Footer = () => {
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-3">
-              <Coffee size={20} className="text-sand" strokeWidth={1.5} />
+              <Coffee size={20} className="text-sand-dark" strokeWidth={1.5} />
               <span className="font-serif text-2xl tracking-[0.18em]">
                 ONÍRIKO
               </span>
@@ -29,18 +28,11 @@ export const Footer = () => {
             </p>
             <div className="mt-6 flex items-center gap-3">
               <a
-                href="https://instagram.com"
+                href="https://instagram.com/onirikocoffee"
                 aria-label="Instagram"
-                className="rounded-full border border-cream-100/15 p-2 text-cream-100/70 transition-colors hover:border-sand hover:text-sand"
+                className="rounded-full border border-cream-100/15 p-2 text-cream-100/70 transition-colors hover:border-sand-dark hover:text-sand-dark"
               >
                 <Instagram size={16} />
-              </a>
-              <a
-                href="https://facebook.com"
-                aria-label="Facebook"
-                className="rounded-full border border-cream-100/15 p-2 text-cream-100/70 transition-colors hover:border-sand hover:text-sand"
-              >
-                <Facebook size={16} />
               </a>
             </div>
           </div>
@@ -52,7 +44,7 @@ export const Footer = () => {
                 <li key={l.href}>
                   <a
                     href={l.href}
-                    className="transition-colors hover:text-sand"
+                    className="transition-colors hover:text-sand-dark"
                   >
                     {t.nav[l.key]}
                   </a>
@@ -67,16 +59,16 @@ export const Footer = () => {
             </h4>
             <ul className="mt-5 space-y-3 text-sm text-cream-100/70">
               <li className="flex items-start gap-3">
-                <MapPin size={16} className="mt-0.5 text-sand" strokeWidth={1.5} />
-                <span>{t.footer.address}</span>
+                <MapPin size={16} className="mt-0.5 text-sand-dark" strokeWidth={1.5} />
+                <span className="whitespace-pre-line">{t.footer.address}</span>
               </li>
               <li className="flex items-start gap-3">
-                <Mail size={16} className="mt-0.5 text-sand" strokeWidth={1.5} />
+                <Mail size={16} className="mt-0.5 text-sand-dark" strokeWidth={1.5} />
                 <a
-                  href="mailto:hola@oniriko.es"
-                  className="transition-colors hover:text-sand"
+                  href="mailto:Onirikocoffee@gmail.com"
+                  className="transition-colors hover:text-sand-dark"
                 >
-                  hola@oniriko.es
+                  Onirikocoffee@gmail.com
                 </a>
               </li>
             </ul>
@@ -88,7 +80,7 @@ export const Footer = () => {
             </h4>
             <ul className="mt-5 space-y-3 text-sm text-cream-100/70">
               <li className="flex items-start gap-3">
-                <Clock size={16} className="mt-0.5 text-sand" strokeWidth={1.5} />
+                <Clock size={16} className="mt-0.5 text-sand-dark" strokeWidth={1.5} />
                 <div>
                   <p>{t.footer.hours1}</p>
                   <p>{t.footer.hours2}</p>
@@ -100,7 +92,7 @@ export const Footer = () => {
 
         <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-cream-100/10 pt-8 text-xs uppercase tracking-widest text-cream-100/50 sm:flex-row sm:items-center">
           <p>{t.footer.rights(year)}</p>
-          <p className="divider-editorial text-sand/70 sm:gap-3">
+          <p className="divider-editorial text-sand-dark/70 sm:gap-3">
             <span>{t.footer.made}</span>
           </p>
         </div>

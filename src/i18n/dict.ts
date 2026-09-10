@@ -12,7 +12,7 @@ export type Dictionary = {
     ogTitle: string;
     ogDescription: string;
   };
-  nav: { inicio: string; nosotros: string; menu: string; galeria: string; productos: string; comunidad: string; reservar: string };
+  nav: { inicio: string; nosotros: string; menu: string; galeria: string; reservar: string };
   hero: { eyebrow: string; title: string; description: string; cta: string; ctaSecondary: string };
   about: { eyebrow: string; title: string; p1: string; p2: string; highlights: { cafe: { t: string; d: string }; bakery: { t: string; d: string }; pet: { t: string; d: string }; wifi: { t: string; d: string } }; stamp: string };
   menu: { eyebrow: string; title: string; description: string };
@@ -37,8 +37,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       nosotros: "Nosotros",
       menu: "Menú",
       galeria: "Galería",
-      productos: "Productos",
-      comunidad: "Comunidad",
       reservar: "Reservar",
     },
     hero: {
@@ -120,7 +118,7 @@ export const dictionaries: Record<Locale, Dictionary> = {
       nav: "Navegación",
       contacto: "Contacto",
       horario: "Horario",
-      address: "Avilés, Asturias",
+      address: "Calle Alfonso VII, 3 \n Avilés (Asturias)",
       hours1: "Lun – Dom · 09:00 – 14:00",
       hours2: "Jue – Sáb · 17:00 – 20:00",
       made: "Hecho con calma en Avilés",
@@ -140,8 +138,6 @@ export const dictionaries: Record<Locale, Dictionary> = {
       nosotros: "About",
       menu: "Menu",
       galeria: "Gallery",
-      productos: "Products",
-      comunidad: "Community",
       reservar: "Book",
     },
     hero: {

@@ -7,9 +7,10 @@ import { useLanguage } from "../i18n/LanguageContext";
 
 type LanguageSelectorProps = {
   variant?: "desktop" | "mobile";
+  scrolled?: boolean;
 };
 
-export const LanguageSelector = ({ variant = "desktop" }: LanguageSelectorProps) => {
+export const LanguageSelector = ({ variant = "desktop", scrolled = false }: LanguageSelectorProps) => {
   const { locale, setLocale } = useLanguage();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -70,9 +71,13 @@ export const LanguageSelector = ({ variant = "desktop" }: LanguageSelectorProps)
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="flex items-center gap-2 rounded-full border border-espresso/15 px-3 py-1.5 text-xs uppercase tracking-widest text-espresso/80 transition-colors hover:border-espresso hover:text-espresso"
+        className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs uppercase tracking-widest transition-colors font-medium ${
+          scrolled 
+            ? "border-espresso/15 text-espresso/80 hover:border-espresso hover:text-espresso" 
+            : "border-cream-100/20 text-cream-100/80 hover:border-cream-100 hover:text-cream-100"
+        }`}
       >
-        <span aria-hidden className="text-base">
+        <span aria-hidden className="text-base leading-none">
           {current.flag}
         </span>
         {current.code.toUpperCase()}
