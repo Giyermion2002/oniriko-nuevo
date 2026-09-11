@@ -23,19 +23,43 @@ export const Contact = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const phoneNum = "34634539806";
-    const message = `Hola Oníriko! 👋%0A%0A${t.contact.description}%0A%0A` + 
-                    `*Nombre*: ${encodeURIComponent(formData.name)}%0A` +
-                    `*Email*: ${encodeURIComponent(formData.email)}%0A` +
-                    `*Teléfono*: ${encodeURIComponent(formData.phone)}%0A` +
-                    `*Motivo*: ${encodeURIComponent(formData.reason)}%0A` +
-                    `*Mensaje*: ${encodeURIComponent(formData.message)}%0A%0A` +
-                    `¡Espero vuestra respuesta!`;
+    if (!formData.name || !formData.email || !formData.phone || !formData.reason) {
+      setStatus({ type: "error", message: "Por favor, rellena los campos obligatorios." });
+      return;
+    }
 
-    window.open(`https://wa.me/${phoneNum}?text=${message}`, "_blank");
+    setIsSending(true);
+    setStatus(null);
+
+    try {
+      const response = await fetch("http://localhost:5000/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          reason: formData.reason,
+          message: formData.message,
+        }),
+      });
+
+      if (response.ok) {
+        setStatus({ type: "success", message: "¡Mensaje enviado con éxito!" });
+        setFormData({ name: "", email: "", phone: "", reason: "", message: "" });
+      } else {
+        throw new Error("Error al enviar");
+      }
+    } catch (error) {
+      setStatus({ type: "error", message: "Hubo un error al enviar el mensaje. Inténtalo de nuevo." });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
