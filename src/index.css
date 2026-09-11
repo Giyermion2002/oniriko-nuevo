@@ -111,6 +111,14 @@
     background-image: radial-gradient(rgba(42, 24, 16, 0.04) 1px, transparent 1px);
     background-size: 3px 3px;
   }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
