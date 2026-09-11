@@ -64,13 +64,18 @@ export const Extras = () => {
               </h2>
               <p className="lead mt-5 text-balance">{t.extras.eventsText}</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <a href="https://instagram.com" className="btn-primary">
+              <a 
+              href="https://instagram.com/onirikocoffee" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+              className="btn-primary"
+              >
                   {t.extras.eventsCta1}
-                </a>
-                <a href="#contacto" className="btn-outline">
-                  {t.extras.eventsCta2}
-                </a>
-              </div>
+                  </a>
+                  <a href="#contacto" className="btn-outline">
+                    {t.extras.eventsCta2}
+                  </a>
+                </div>
               <div className="mt-10 flex items-start gap-3 text-sm text-espresso/70">
                 <Megaphone size={16} className="mt-0.5 text-sand-dark" strokeWidth={1.5} />
                 <span>{t.extras.eventsNote}</span>

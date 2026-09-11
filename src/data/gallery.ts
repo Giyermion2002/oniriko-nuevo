@@ -13,28 +13,16 @@ export const galleryItems: GalleryItem[] = [
     category: "brunch",
   },
   {
-    src: "/img/bakery_propia/bakery_propia_img1.jpeg",
-    alt: "Bollería artesana",
-    caption: "Recién horneado",
-    category: "bakery",
-  },
-  {
-    src: "/img/carta/carta_img2.jpeg",
-    alt: "Latte Art",
-    caption: "Precisión en cada taza",
-    category: "cafe",
-  },
-  {
     src: "/img/pet_friendly/pet_friendly_img1.jpeg",
     alt: "Perro acompañando",
     caption: "Bienvenidos todos",
     category: "pet",
   },
   {
-    src: "/img/brunch/brunch_img5.jpeg",
-    alt: "Tostadas de aguacate",
-    caption: "Tostadas frescas",
-    category: "brunch",
+    src: "/img/bakery_propia/bakery_propia_img1.jpeg",
+    alt: "Bollería artesana",
+    caption: "Recién horneado",
+    category: "bakery",
   },
   {
     src: "/img/eventos/eventos_img3.jpeg",
@@ -47,12 +35,6 @@ export const galleryItems: GalleryItem[] = [
     alt: "Croissant dorado",
     caption: "Dorado perfecto",
     category: "bakery",
-  },
-  {
-    src: "/img/carta/carta_img3.jpeg",
-    alt: "Filtro de especialidad",
-    caption: "Aroma intenso",
-    category: "cafe",
   },
   {
     src: "/img/pet_friendly/pet_friendly_img5.jpeg",
@@ -68,8 +50,8 @@ export const galleryItems: GalleryItem[] = [
   },
   {
     src: "/img/bakery_propia/bakery_propia_img2.jpeg",
-    alt: "Hogaza de masa madre",
-    caption: "El pan perfecto",
+    alt: "De masa madre",
+    caption: "Galletas caseras",
     category: "bakery",
   },
   {
