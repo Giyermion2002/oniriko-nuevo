@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Mail, MapPin, Clock, Phone, Instagram } from "lucide-react";
-import emailjs from "@emailjs/browser";
 
 import { Container, Section } from "../components/Layout";
 import { Reveal } from "../components/Reveal";

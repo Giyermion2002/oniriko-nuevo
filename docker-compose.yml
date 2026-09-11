@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./server
+    container_name: oniriko-backend
+    restart: always
+    env_file:
+      - ./server/.env
+    ports:
+      - "5000:5000"
+    networks:
+      - oniriko-network
+
+  frontend:
+    build: 
+      context: .
+      args:
+        - VITE_CURRENT_SEASON=${VITE_CURRENT_SEASON}
+        - VITE_API_URL=${VITE_API_URL}
+    container_name: oniriko-frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - oniriko-network
+
+networks:
+  oniriko-network:
+    driver: bridge

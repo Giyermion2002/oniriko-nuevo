@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -45,7 +45,7 @@ export const Gallery = () => {
             ref={scrollRef}
             className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-8 no-scrollbar lg:hidden"
           >
-            {items.map((item, i) => (
+            {items.map((item) => (
               <motion.div
                 key={item.src}
                 className="min-w-[85vw] snap-center"
@@ -92,7 +92,7 @@ export const Gallery = () => {
 
           {/* Desktop Grid */}
           <div className="hidden lg:grid grid-cols-3 gap-6">
-            {items.map((item, i) => (
+            {items.map((item) => (
               <motion.div
                 key={item.src}
                 initial={{ opacity: 0, y: 24 }}

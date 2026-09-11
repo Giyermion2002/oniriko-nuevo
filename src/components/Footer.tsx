@@ -1,4 +1,4 @@
-import { Coffee, Instagram, Facebook, MapPin, Mail, Clock } from "lucide-react";
+import { Coffee, Instagram, MapPin, Mail, Clock } from "lucide-react";
 
 import { useLanguage } from "../i18n/LanguageContext";
 
