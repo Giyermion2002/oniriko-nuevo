@@ -81,7 +81,11 @@ export const Navbar = () => {
           aria-label={open ? "Cerrar menú" : "Abrir menú"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="lg:hidden rounded-full p-2 text-espresso hover:bg-espresso/5"
+          className={`lg:hidden rounded-full p-2 transition-colors duration-500 ${
+            scrolled
+              ? "text-espresso hover:bg-espresso/5"
+              : "text-cream-50 hover:bg-cream-50/10"
+          }`}
         >
           {open ? <X size={22} /> : <MenuIcon size={22} />}
         </button>
