@@ -1,16 +1,23 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
 const cors = require('cors');
+const { Resend } = require('resend');
 require('dotenv').config();
 
 const app = express();
 
-const frontendUrl = process.env.FRONTEND_URL;
-const allowedOrigins = frontendUrl
-  ? frontendUrl.split(',').map((origin) => origin.trim()).filter(Boolean)
-  : null;
+// FRONTEND_URL: orígenes separados por comas, con trim.
+// Si no está definida (o es '*'), se permiten todos.
+const configuredOrigins = (process.env.FRONTEND_URL || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
-app.use(cors(allowedOrigins && allowedOrigins.length > 0 ? { origin: allowedOrigins } : undefined));
+const corsOptions =
+  configuredOrigins.length === 0 || configuredOrigins.includes('*')
+    ? { origin: '*' }
+    : { origin: configuredOrigins };
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
@@ -23,17 +30,19 @@ app.post('/send-email', async (req, res) => {
   }
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
+    if (!process.env.RESEND_API_KEY || !process.env.CONTACT_EMAIL) {
+      console.error('Faltan RESEND_API_KEY o CONTACT_EMAIL en el entorno');
+      return res.status(500).json({ error: 'Email service not configured' });
+    }
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+    // Se crea dentro del handler: si no hay API key, el constructor lanza y
+    // se captura aquí en vez de tumbar el servidor al arrancar.
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    const { data, error } = await resend.emails.send({
+      from: 'Oníriko Web <onboarding@resend.dev>',
+      to: [process.env.CONTACT_EMAIL],
+      replyTo: email,
       subject: 'New Contact Form: ' + reason,
       text: `You have a new message from your website:
 
@@ -42,13 +51,22 @@ Email: ${email}
 Phone: ${phone}
 Reason: ${reason}
 Message: ${message}`,
-    };
+    });
 
-    await transporter.sendMail(mailOptions);
-    res.status(200).json({ success: true, message: 'Email sent successfully' });
+    if (error) {
+      console.error('Error de Resend al enviar el correo:', error);
+      const status =
+        error.statusCode >= 400 && error.statusCode < 500 ? 400 : 500;
+      return res.status(status).json({ error: 'Error sending email' });
+    }
+
+    console.log('Correo enviado con id:', data?.id);
+    return res
+      .status(200)
+      .json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 

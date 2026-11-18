@@ -1,12 +1,12 @@
 # Oníriko
 
-Web de **Oníriko Specialty Coffee** (Avilés). Single Page Application en React + TypeScript + Vite, con un backend en Express/Nodemailer para el formulario de contacto.
+Web de **Oníriko Specialty Coffee** (Avilés). Single Page Application en React + TypeScript + Vite, con un backend en Express/Resend para el formulario de contacto.
 
 ## Requisitos
 
 - Node.js 20+ y npm
 - (Opcional) Docker y Docker Compose para despliegue contenerizado
-- Una cuenta de Gmail con **contraseña de aplicación** (para el envío de correos desde el backend)
+- Una API key de [Resend](https://resend.com) (para el envío de correos desde el backend)
 
 ## Estructura del proyecto
 
@@ -54,37 +54,34 @@ VITE_API_URL=http://localhost:5000
 
 ### 2) Backend (`server/.env`)
 
-Crea o ajusta `server/.env` (puedes partir de `server/EXAMPLE.env`) con las credenciales SMTP de Gmail y el origen permitido del frontend:
+Crea o ajusta `server/.env` (puedes partir de `server/EXAMPLE.env`) con la API key de Resend, el correo de destino y el origen permitido del frontend:
 
 ```env
+RESEND_API_KEY=re_tu_api_key
+CONTACT_EMAIL=tu-correo@resend.dev
 PORT=5000
-EMAIL_USER=tu-correo@gmail.com
-EMAIL_PASS=tu_contraseña_de_aplicacion_de_gmail
 FRONTEND_URL=http://localhost:5173,http://localhost:4173
 ```
 
-- `PORT` (opcional): puerto del backend (por defecto `5000`).
-- `EMAIL_USER`: cuenta Gmail desde la que se envían los correos (también se usa como destinatario en la implementación actual).
-- `EMAIL_PASS`: **contraseña de aplicación** de Google (no la contraseña normal de la cuenta).
-- `FRONTEND_URL` (opcional, recomendado): origen(es) permitidos para CORS, separados por comas (p. ej. URL del frontend en desarrollo, preview o producción). Si no se define, el servidor permite peticiones desde cualquier origen.
+- `RESEND_API_KEY`: API key de Resend (nunca se incluye en el repositorio).
+- `CONTACT_EMAIL`: dirección que recibe los mensajes del formulario (`to`).
+- `PORT` (opcional): puerto del backend (por defecto `5000`; Render lo inyecta automáticamente).
+- `FRONTEND_URL` (opcional, recomendado): origen(es) permitidos para CORS, separados por comas y con `trim`. Si no se define (o es `*`), el servidor permite peticiones desde cualquier origen.
 
-## Cómo obtener las credenciales de Gmail (App Password)
+El correo se envía con `from: 'Oníriko Web <onboarding@resend.dev>'` y `replyTo` = el email introducido en el formulario.
 
-El backend usa Nodemailer con `service: "gmail"`. Para que funcione, necesitas una contraseña de aplicación:
+## Cómo obtener la API key de Resend
 
-1. Usa una cuenta de Google/Gmail que controle el proyecto.
-2. Activa la **verificación en dos pasos (2FA)** en la cuenta:
-   - Google Account → **Seguridad** → **Verificación en dos pasos**.
-3. Crea una **contraseña de aplicación**:
-   - Google Account → **Seguridad** → **Verificación en dos pasos** → **Contraseñas de aplicaciones**.
-   - Selecciona una app/nombre identificable (p. ej. "Oniriko Web") y genera la contraseña.
-4. Copia la contraseña generada (normalmente 16 caracteres) y pégala en `server/.env` como `EMAIL_PASS`.
-5. Usa el correo de esa cuenta como `EMAIL_USER`.
+El backend usa el SDK de Resend (`resend.emails.send`). Para que funcione:
+
+1. Crea una cuenta en [resend.com](https://resend.com).
+2. En el dashboard, entra en **API Keys** y pulsa **Create API Key**.
+3. Copia la clave (empieza por `re_`) y pégala en `server/.env` como `RESEND_API_KEY`.
+4. Define `CONTACT_EMAIL` con la dirección que debe recibir los mensajes.
 
 **Notas importantes:**
-- No uses tu contraseña habitual de Gmail en `EMAIL_PASS`.
-- Si no ves la opción de contraseñas de aplicación, revisa que la 2FA esté activada y que la cuenta permita este método.
-- Mantén `server/.env` fuera del control de versiones y no compartas estas credenciales.
+- `onboarding@resend.dev` es el remitente de prueba: en la cuenta gratuita solo entrega al correo propietario de la cuenta de Resend. Para otros destinos, verifica un dominio propio y cambia el `from` en `server/index.js`.
+- Mantén `server/.env` fuera del control de versiones y no compartas la API key.
 
 ## Ejecución en local
 
@@ -124,7 +121,7 @@ npm run dev
 
 Asegúrate de tener configuradas las variables necesarias antes de construir:
 
-- `server/.env` con `EMAIL_USER`, `EMAIL_PASS` (y `PORT` si aplica).
+- `server/.env` con `RESEND_API_KEY`, `CONTACT_EMAIL` (y `PORT` si aplica).
 - Variables de build del frontend (`VITE_CURRENT_SEASON`, `VITE_API_URL`) disponibles en el entorno desde el que ejecutes Docker Compose (por ejemplo, en un `.env` en la raíz para la interpolación de Compose).
 
 Para la configuración incluida (`nginx.conf` hace proxy de `/api/` al backend), lo habitual es definir:
@@ -157,9 +154,21 @@ docker compose up --build
 - Proxy de `/api/` hacia `http://backend:5000/` (el prefijo `/api` se elimina en el proxy), por lo que el endpoint del backend queda accesible como `/api/send-email` a través del frontend.
 - Con `VITE_API_URL=/api`, el formulario enviará las peticiones al mismo origen (`/api/send-email`), que Nginx redirige al backend.
 
+## Despliegue en Render
+
+El backend se despliega como **Web Service**:
+
+- **Root Directory**: `server`
+- **Runtime**: Node 20 (o superior)
+- **Build Command**: `npm install`
+- **Start Command**: `npm start` (equivale a `node index.js`)
+- **Environment variables**: `RESEND_API_KEY`, `CONTACT_EMAIL` y `FRONTEND_URL` con la URL del frontend. `PORT` no hace falta: Render lo define automáticamente y el servidor ya escucha en `process.env.PORT || 5000`.
+
+Si el frontend se despliega como Static Site en Render: Build Command `npm run build`, Publish Directory `dist`, y variable `VITE_API_URL` apuntando a la URL del backend. Para que el backend acepte las peticiones, añade esa URL del frontend a `FRONTEND_URL`.
+
 ## Arquitectura
 
 - **SPA (React)**: `App.tsx` compone la página con `SEO`, `Navbar`, secciones (`Hero`, `About`, `Menu`, `Extras`, `Gallery`, `Contact`) y `Footer`. El contenido se apoya en `src/data` y la internacionalización en `src/i18n`. Incluye animaciones con Framer Motion y utilidades como `Reveal` y `ScrollToTop`.
-- **API de contacto**: servicio Express independiente, sin persistencia, encargado de validar la solicitud y reenviar el mensaje por correo mediante Nodemailer (Gmail).
+- **API de contacto**: servicio Express independiente, sin persistencia, encargado de validar la solicitud y reenviar el mensaje por correo mediante Resend.
 - **Integración en producción**: Nginx actúa como punto de entrada: sirve los assets estáticos del frontend y redirige las peticiones `/api/*` al backend, separando la entrega de la web del envío de correos.
 - **Configuración por entorno/temporada**: el frontend admite variables `VITE_*` en tiempo de build (p. ej. temporada y URL base de la API) para adaptar contenido y configuración de despliegue.
