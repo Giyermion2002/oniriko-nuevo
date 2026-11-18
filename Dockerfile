@@ -15,6 +15,10 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
+
+# FIX: Force execution permissions on node_modules bin folder
+RUN chmod -R +x node_modules/.bin
+
 RUN npm run build
 
 # Production stage
