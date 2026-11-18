@@ -10,6 +10,7 @@ const linkKeys = [
   { href: "#nosotros", key: "nosotros" },
   { href: "#menu", key: "menu" },
   { href: "#galeria", key: "galeria" },
+  { href: "#contacto", key: "contacto" },
 ] as const;
 
 export const Navbar = () => {
