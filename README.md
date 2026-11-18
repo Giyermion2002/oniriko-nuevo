@@ -27,39 +27,46 @@ Web de **Oníriko Specialty Coffee** (Avilés). Single Page Application en React
 
 ## Configuración de variables de entorno
 
-> En el repositorio pueden existir archivos `.env` locales, pero no hay `.env.example` versionados. Crea los archivos necesarios antes de ejecutar la app.
+> En el repositorio hay archivos `EXAMPLE.env` (raíz y `server/`) como plantilla, junto con `.env` locales. Revisa y ajusta los valores necesarios antes de ejecutar la app.
 
 ### 1) Frontend (Vite, prefijo `VITE_`)
 
-Crea un archivo `.env` en la **raíz del proyecto** (junto a `package.json`) si vas a ejecutar/buildar el frontend localmente:
+Crea un archivo `.env` en la **raíz del proyecto** (junto a `package.json`) si vas a ejecutar/buildar el frontend:
 
 ```env
 # Temporada usada para recursos/contenido del menú (p. ej. imagen de carta en /img/menu/<temporada>/...)
-# Si no se define, la app usa "verano" por defecto. Posibles valores: primavera/verano/otono/invierno. Las imagenes que contengan estas cartas deben alojarse en public/img/menu/SEASON/carta.jpeg 
+# Si no se define, la app usa "verano" por defecto.
 VITE_CURRENT_SEASON=verano
 
-# Variable de entorno de build disponible en la configuración Docker.
-# Nota: actualmente el formulario de contacto usa una URL hardcodeada en el frontend (ver notas más abajo).
+# URL base del backend para el formulario de contacto.
+# El frontend hará la petición a: <VITE_API_URL>/send-email
+# - Desarrollo local (backend en tu máquina): http://localhost:5000
+# - Producción con Nginx proxy (/api -> backend): /api
+# Si no se define, se usa por defecto: http://localhost:5000
 VITE_API_URL=http://localhost:5000
 ```
 
 **Uso en el código:**
 - `VITE_CURRENT_SEASON`: se usa en `src/data/menu.ts` y `src/sections/Menu.tsx` (fallback: `verano`).
-- `VITE_API_URL`: se pasa como argumento de build en Docker Compose, pero no se consume actualmente en el código del frontend.
+- `VITE_API_URL`: se usa en `src/sections/Contact.tsx` como base para enviar el formulario a `POST <VITE_API_URL>/send-email` (fallback: `http://localhost:5000`).
+
+> Importante: las variables `VITE_*` se inyectan en **tiempo de build**. Si cambias `VITE_API_URL` (u otras `VITE_*`), debes volver a ejecutar el build/generar la imagen.
 
 ### 2) Backend (`server/.env`)
 
-Crea un archivo `server/.env` con las credenciales SMTP de Gmail:
+Crea o ajusta `server/.env` (puedes partir de `server/EXAMPLE.env`) con las credenciales SMTP de Gmail y el origen permitido del frontend:
 
 ```env
 PORT=5000
 EMAIL_USER=tu-correo@gmail.com
 EMAIL_PASS=tu_contraseña_de_aplicacion_de_gmail
+FRONTEND_URL=http://localhost:5173,http://localhost:4173
 ```
 
 - `PORT` (opcional): puerto del backend (por defecto `5000`).
 - `EMAIL_USER`: cuenta Gmail desde la que se envían los correos (también se usa como destinatario en la implementación actual).
 - `EMAIL_PASS`: **contraseña de aplicación** de Google (no la contraseña normal de la cuenta).
+- `FRONTEND_URL` (opcional, recomendado): origen(es) permitidos para CORS, separados por comas (p. ej. URL del frontend en desarrollo, preview o producción). Si no se define, el servidor permite peticiones desde cualquier origen.
 
 ## Cómo obtener las credenciales de Gmail (App Password)
 
@@ -104,7 +111,7 @@ npm run dev
 ```
 
 - Vite mostrará la URL local (normalmente `http://localhost:5173`).
-- **Importante:** el formulario de contacto (`src/sections/Contact.tsx`) envía actualmente las peticiones a `http://localhost:5000/send-email` (URL hardcodeada), así que para probar el envío en local el backend debe estar corriendo en ese host/puerto.
+- El formulario de contacto envía a `<VITE_API_URL>/send-email`. Si no defines `VITE_API_URL`, usará `http://localhost:5000` por defecto, por lo que en desarrollo local basta con tener el backend levantado en ese puerto.
 
 ### Scripts disponibles (frontend)
 
@@ -118,7 +125,14 @@ npm run dev
 Asegúrate de tener configuradas las variables necesarias antes de construir:
 
 - `server/.env` con `EMAIL_USER`, `EMAIL_PASS` (y `PORT` si aplica).
-- Variables de build del frontend (`VITE_CURRENT_SEASON`, `VITE_API_URL`) disponibles en el entorno desde el que ejecutes Docker Compose (por ejemplo, en un `.env` en la raíz, que Compose puede leer para interpolación).
+- Variables de build del frontend (`VITE_CURRENT_SEASON`, `VITE_API_URL`) disponibles en el entorno desde el que ejecutes Docker Compose (por ejemplo, en un `.env` en la raíz para la interpolación de Compose).
+
+Para la configuración incluida (`nginx.conf` hace proxy de `/api/` al backend), lo habitual es definir:
+
+```env
+VITE_CURRENT_SEASON=verano
+VITE_API_URL=/api
+```
 
 Construir y levantar:
 
@@ -141,12 +155,11 @@ docker compose up --build
 
 - Sirve la SPA con fallback a `index.html` (`try_files $uri $uri/ /index.html`).
 - Proxy de `/api/` hacia `http://backend:5000/` (el prefijo `/api` se elimina en el proxy), por lo que el endpoint del backend queda accesible como `/api/send-email` a través del frontend.
-
-> Nota de integración: el código actual del formulario apunta a `http://localhost:5000/send-email`. Si despliegas con Nginx y quieres usar el proxy `/api`, revisa/ajusta la URL de envío en `src/sections/Contact.tsx`.
+- Con `VITE_API_URL=/api`, el formulario enviará las peticiones al mismo origen (`/api/send-email`), que Nginx redirige al backend.
 
 ## Arquitectura
 
 - **SPA (React)**: `App.tsx` compone la página con `SEO`, `Navbar`, secciones (`Hero`, `About`, `Menu`, `Extras`, `Gallery`, `Contact`) y `Footer`. El contenido se apoya en `src/data` y la internacionalización en `src/i18n`. Incluye animaciones con Framer Motion y utilidades como `Reveal` y `ScrollToTop`.
 - **API de contacto**: servicio Express independiente, sin persistencia, encargado de validar la solicitud y reenviar el mensaje por correo mediante Nodemailer (Gmail).
-- **Integración en producción**: Nginx actúa como punto de entrada: sirve los assets estáticos del frontend y puede redirigir las peticiones `/api/*` al backend, separando la entrega de la web del envío de correos.
-- **Configuración por entorno/temporada**: el frontend admite variables `VITE_*` en tiempo de build (p. ej. temporada y URL de API) para adaptar contenido y configuración de despliegue.
+- **Integración en producción**: Nginx actúa como punto de entrada: sirve los assets estáticos del frontend y redirige las peticiones `/api/*` al backend, separando la entrega de la web del envío de correos.
+- **Configuración por entorno/temporada**: el frontend admite variables `VITE_*` en tiempo de build (p. ej. temporada y URL base de la API) para adaptar contenido y configuración de despliegue.

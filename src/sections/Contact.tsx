@@ -34,7 +34,8 @@ export const Contact = () => {
     setStatus(null);
 
     try {
-      const response = await fetch("http://localhost:5000/send-email", {
+      const apiBaseUrl = (import.meta.env.VITE_API_URL ?? "http://localhost:5000").replace(/\/+$/, "");
+      const response = await fetch(`${apiBaseUrl}/send-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

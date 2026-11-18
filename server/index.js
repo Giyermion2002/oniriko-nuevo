@@ -4,7 +4,13 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-app.use(cors());
+
+const frontendUrl = process.env.FRONTEND_URL;
+const allowedOrigins = frontendUrl
+  ? frontendUrl.split(',').map((origin) => origin.trim()).filter(Boolean)
+  : null;
+
+app.use(cors(allowedOrigins && allowedOrigins.length > 0 ? { origin: allowedOrigins } : undefined));
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
