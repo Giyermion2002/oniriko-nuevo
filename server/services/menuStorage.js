@@ -36,9 +36,9 @@ function defaultConfig() {
   return {
     items: [
       {
-        id: 'temporada',
-        label: 'Carta de temporada',
-        alt: 'Carta de temporada Oníriko',
+        id: 'carta-0',
+        label: 'Carta 1',
+        alt: 'Carta Oníriko',
         url: '/img/menu/verano/carta.jpeg',
         publicId: null,
         updatedAt: 1,
