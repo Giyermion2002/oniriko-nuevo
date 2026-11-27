@@ -34,10 +34,6 @@ Web de **Oníriko Specialty Coffee** (Avilés). Single Page Application en React
 Crea un archivo `.env` en la **raíz del proyecto** (junto a `package.json`) si vas a ejecutar/buildar el frontend:
 
 ```env
-# Temporada usada para recursos/contenido del menú (p. ej. imagen de carta en /img/menu/<temporada>/...)
-# Si no se define, la app usa "verano" por defecto.
-VITE_CURRENT_SEASON=verano
-
 # URL base del backend para el formulario de contacto.
 # El frontend hará la petición a: <VITE_API_URL>/send-email
 # - Desarrollo local (backend en tu máquina): http://localhost:5000
@@ -51,7 +47,6 @@ VITE_ADMIN_PATH=/gestion-carta
 ```
 
 **Uso en el código:**
-- `VITE_CURRENT_SEASON`: se usa solo como fallback de la primera imagen mientras el backend responde (`src/sections/Menu.tsx`); la fuente real de la carta es el panel admin.
 - `VITE_API_URL`: base del backend, usada por el formulario (`POST <VITE_API_URL>/send-email`) y por la carta/panel (`GET <VITE_API_URL>/menu`, endpoints `/admin/*`).
 - `VITE_ADMIN_PATH`: ruta del panel privado de carta (fallback: `/gestion-carta`). No se enlaza desde la web pública.
 
@@ -159,12 +154,11 @@ npm run dev
 Asegúrate de tener configuradas las variables necesarias antes de construir:
 
 - `server/.env` con `RESEND_API_KEY`, `CONTACT_EMAIL` (y `PORT` si aplica).
-- Variables de build del frontend (`VITE_CURRENT_SEASON`, `VITE_API_URL`) disponibles en el entorno desde el que ejecutes Docker Compose (por ejemplo, en un `.env` en la raíz para la interpolación de Compose).
+- Variable de build del frontend (`VITE_API_URL`) disponible en el entorno desde el que ejecutes Docker Compose (por ejemplo, en un `.env` en la raíz para la interpolación de Compose).
 
 Para la configuración incluida (`nginx.conf` hace proxy de `/api/` al backend), lo habitual es definir:
 
 ```env
-VITE_CURRENT_SEASON=verano
 VITE_API_URL=/api
 ```
 
@@ -179,7 +173,7 @@ docker compose up --build
 - **frontend**
   - Build multi-stage: Node 20 Alpine (`npm install`, `npm run build`) + Nginx (`nginx:stable-alpine`) para servir `dist/`.
   - Expone el puerto `80`.
-  - Recibe `VITE_CURRENT_SEASON` y `VITE_API_URL` como argumentos de build.
+  - Recibe `VITE_API_URL` como argumento de build.
 - **backend**
   - Build desde `./server`.
   - Expone el puerto `5000`.
@@ -209,4 +203,4 @@ Si el frontend se despliega en **Cloudflare Pages**: Build Command `npm run buil
 - **API de contacto**: servicio Express independiente, sin persistencia, encargado de validar la solicitud y reenviar el mensaje por correo mediante Resend.
 - **Integración en producción**: Cloudflare Pages sirve el `dist/` estático y Render expone la API REST; el frontend apunta a `VITE_API_URL`. (En el despliegue Docker alternativo, Nginx actúa como punto de entrada y redirige `/api/*` al backend.)
 - **Carta gestionada desde el panel**: `Menu.tsx` consume `GET /menu`, por lo que cambiar imágenes no requiere editar código ni reconstruir el frontend. Con Cloudinary configurado, la configuración y las imágenes persisten en Render; sin él, se usa disco local para pruebas.
-- **Configuración por entorno**: el frontend admite variables `VITE_*` en tiempo de build (URL de la API y ruta del panel); `VITE_CURRENT_SEASON` solo actúa como fallback visual inicial.
+- **Configuración por entorno**: el frontend admite variables `VITE_*` en tiempo de build (URL de la API y ruta del panel). La selección de imágenes de carta se gestiona desde el panel admin, no por variables de temporada.
