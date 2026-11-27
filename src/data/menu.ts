@@ -10,7 +10,6 @@ export type MenuCategory = {
   eyebrow: string;
   title: string;
   description: string;
-  cover: string;
   products: MenuProduct[];
 };
 
@@ -21,7 +20,6 @@ export const menu: MenuCategory[] = [
     title: "El ritual de cada mañana",
     description:
       "Granos seleccionados de microlotes, extracción precisa y un menú cambiante de filtros y espresso.",
-    cover: `/img/menu/${import.meta.env.VITE_CURRENT_SEASON || 'verano'}/carta.jpeg`,
     products: [
       { name: "Espresso", description: "Doble, limpio y persistente.", price: "2,20€" },
       { name: "Cappuccino", description: "Textura sedosa, equilibrio clásico.", price: "3,20€" },
@@ -37,7 +35,6 @@ export const menu: MenuCategory[] = [
     title: "Sin prisa, con todo",
     description:
       "Huevos, panes, frutas y bowls para empezar (o seguir) el día como se merece.",
-    cover: "/img/brunch/brunch_img4.jpeg",
     products: [
       { name: "Brunch ONÍRIKO", description: "Huevos, aguacate, pan de masa madre, fruta y café.", price: "16,50€", tag: "Estrella" },
       { name: "Bowl de yogur", description: "Yogur griego, granola casera, frutas de temporada y miel.", price: "7,80€" },
@@ -53,7 +50,6 @@ export const menu: MenuCategory[] = [
     title: "Horneado al alba",
     description:
       "Bollería artesana, panes de masa madre y dulces que cambian cada semana.",
-    cover: "/img/bakery_propia/bakery_propia_img2.jpeg",
     products: [
       { name: "Croissant de mantequilla", description: "Hojaldrado, dorado, crujiente.", price: "2,80€" },
       { name: "Pain au chocolat", description: "Hojaldre con chocolate negro 70%.", price: "3,00€" },

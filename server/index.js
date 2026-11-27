@@ -1,7 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const { Resend } = require('resend');
 require('dotenv').config();
+
+const menuRouter = require('./routes/menu');
+
+const dataDir = process.env.DATA_DIR || path.join(__dirname, 'data');
 
 const app = express();
 
@@ -12,13 +17,25 @@ const configuredOrigins = (process.env.FRONTEND_URL || '')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-const corsOptions =
-  configuredOrigins.length === 0 || configuredOrigins.includes('*')
-    ? { origin: '*' }
-    : { origin: configuredOrigins };
+const corsOptions = {
+  origin:
+    configuredOrigins.length === 0 || configuredOrigins.includes('*')
+      ? '*'
+      : configuredOrigins,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(
+  '/uploads',
+  express.static(path.join(dataDir, 'uploads'), {
+    maxAge: '30d',
+    immutable: true,
+  }),
+);
+app.use(menuRouter);
 
 const PORT = process.env.PORT || 5000;
 

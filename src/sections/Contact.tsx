@@ -4,6 +4,7 @@ import { Mail, MapPin, Clock, Phone, Instagram } from "lucide-react";
 import { Container, Section } from "../components/Layout";
 import { Reveal } from "../components/Reveal";
 import { useLanguage } from "../i18n/LanguageContext";
+import { API_BASE_URL } from "../lib/api";
 
 export const Contact = () => {
   const { t } = useLanguage();
@@ -34,8 +35,7 @@ export const Contact = () => {
     setStatus(null);
 
     try {
-      const apiBaseUrl = (import.meta.env.VITE_API_URL ?? "http://localhost:5000").replace(/\/+$/, "");
-      const response = await fetch(`${apiBaseUrl}/send-email`, {
+      const response = await fetch(`${API_BASE_URL}/send-email`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

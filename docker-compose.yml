@@ -16,7 +16,6 @@ services:
     build: 
       context: .
       args:
-        - VITE_CURRENT_SEASON=${VITE_CURRENT_SEASON}
         - VITE_API_URL=${VITE_API_URL}
     container_name: oniriko-frontend
     restart: always

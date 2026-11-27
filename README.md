@@ -34,21 +34,21 @@ Web de **Oníriko Specialty Coffee** (Avilés). Single Page Application en React
 Crea un archivo `.env` en la **raíz del proyecto** (junto a `package.json`) si vas a ejecutar/buildar el frontend:
 
 ```env
-# Temporada usada para recursos/contenido del menú (p. ej. imagen de carta en /img/menu/<temporada>/...)
-# Si no se define, la app usa "verano" por defecto.
-VITE_CURRENT_SEASON=verano
-
 # URL base del backend para el formulario de contacto.
 # El frontend hará la petición a: <VITE_API_URL>/send-email
 # - Desarrollo local (backend en tu máquina): http://localhost:5000
 # - Producción con Nginx proxy (/api -> backend): /api
 # Si no se define, se usa por defecto: http://localhost:5000
 VITE_API_URL=http://localhost:5000
+
+# Ruta "oculta" del panel para gestionar las imágenes de la carta.
+# Si no se define, se usa por defecto: /gestion-carta
+VITE_ADMIN_PATH=/gestion-carta
 ```
 
 **Uso en el código:**
-- `VITE_CURRENT_SEASON`: se usa en `src/data/menu.ts` y `src/sections/Menu.tsx` (fallback: `verano`).
-- `VITE_API_URL`: se usa en `src/sections/Contact.tsx` como base para enviar el formulario a `POST <VITE_API_URL>/send-email` (fallback: `http://localhost:5000`).
+- `VITE_API_URL`: base del backend, usada por el formulario (`POST <VITE_API_URL>/send-email`) y por la carta/panel (`GET <VITE_API_URL>/menu`, endpoints `/admin/*`).
+- `VITE_ADMIN_PATH`: ruta del panel privado de carta (fallback: `/gestion-carta`). No se enlaza desde la web pública.
 
 > Importante: las variables `VITE_*` se inyectan en **tiempo de build**. Si cambias `VITE_API_URL` (u otras `VITE_*`), debes volver a ejecutar el build/generar la imagen.
 
@@ -61,6 +61,15 @@ RESEND_API_KEY=re_tu_api_key
 CONTACT_EMAIL=tu-correo@resend.dev
 PORT=5000
 FRONTEND_URL=http://localhost:5173,http://localhost:4173
+
+# Panel admin de carta
+ADMIN_PASSWORD=una_contrasena_larga_y_segura
+JWT_SECRET=secreto_aleatorio_largo_para_firmar_tokens
+
+# Persistencia de imágenes (obligatorio en Render; opcional en local)
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
 ```
 
 - `RESEND_API_KEY`: API key de Resend (nunca se incluye en el repositorio).
@@ -82,6 +91,29 @@ El backend usa el SDK de Resend (`resend.emails.send`). Para que funcione:
 **Notas importantes:**
 - `onboarding@resend.dev` es el remitente de prueba: en la cuenta gratuita solo entrega al correo propietario de la cuenta de Resend. Para otros destinos, verifica un dominio propio y cambia el `from` en `server/index.js`.
 - Mantén `server/.env` fuera del control de versiones y no compartas la API key.
+
+### Panel de administración de la carta
+
+La web incluye un panel privado (por defecto en `/gestion-carta`, configurable con `VITE_ADMIN_PATH`) para reemplazar, añadir, reordenar o eliminar **todas** las imágenes de la carta sin tocar código ni hacer un nuevo build.
+
+**Cómo probarlo en local:**
+
+1. Añade `ADMIN_PASSWORD` y `JWT_SECRET` a `server/.env` (puedes partir de `server/EXAMPLE.env`).
+2. Levanta el backend (`cd server && npm start`) y el frontend (`npm run dev`).
+3. Entra en `http://localhost:5173/gestion-carta` y utiliza la contraseña definida.
+
+**Persistencia de imágenes:**
+
+- En local, si no configuras Cloudinary, las imágenes y el fichero `menu-config.json` se guardan en `server/data/` (ignorado por Git).
+- En Render (plan gratuito, disco efímero), **configura las tres variables `CLOUDINARY_*`**: las imágenes se suben a Cloudinary y el propio `menu-config.json` se guarda allí como archivo `raw`, por lo que los cambios sobreviven a reinicios y deployments.
+- El login está protegido con JWT en cabecera `Authorization`, límite de 8 intentos cada 15 minutos y comparación de contraseña en tiempo constante. Nunca se envían credenciales en variables `VITE_*`.
+
+Endpoints relacionados:
+
+- `GET /menu` → lista pública de imágenes de la carta.
+- `GET /health` → comprobación rápida del backend (útil para monitors gratuitos y evitar el cold start de Render).
+- `POST /admin/login`, `GET /admin/verify` → autenticación.
+- `POST /admin/menu/items`, `PUT /admin/menu/items/:id/image`, `PATCH /admin/menu/items/:id`, `PUT /admin/menu/reorder`, `DELETE /admin/menu/items/:id` → gestión protegida.
 
 ## Ejecución en local
 
@@ -122,12 +154,11 @@ npm run dev
 Asegúrate de tener configuradas las variables necesarias antes de construir:
 
 - `server/.env` con `RESEND_API_KEY`, `CONTACT_EMAIL` (y `PORT` si aplica).
-- Variables de build del frontend (`VITE_CURRENT_SEASON`, `VITE_API_URL`) disponibles en el entorno desde el que ejecutes Docker Compose (por ejemplo, en un `.env` en la raíz para la interpolación de Compose).
+- Variable de build del frontend (`VITE_API_URL`) disponible en el entorno desde el que ejecutes Docker Compose (por ejemplo, en un `.env` en la raíz para la interpolación de Compose).
 
 Para la configuración incluida (`nginx.conf` hace proxy de `/api/` al backend), lo habitual es definir:
 
 ```env
-VITE_CURRENT_SEASON=verano
 VITE_API_URL=/api
 ```
 
@@ -142,7 +173,7 @@ docker compose up --build
 - **frontend**
   - Build multi-stage: Node 20 Alpine (`npm install`, `npm run build`) + Nginx (`nginx:stable-alpine`) para servir `dist/`.
   - Expone el puerto `80`.
-  - Recibe `VITE_CURRENT_SEASON` y `VITE_API_URL` como argumentos de build.
+  - Recibe `VITE_API_URL` como argumento de build.
 - **backend**
   - Build desde `./server`.
   - Expone el puerto `5000`.
@@ -162,13 +193,14 @@ El backend se despliega como **Web Service**:
 - **Runtime**: Node 20 (o superior)
 - **Build Command**: `npm install`
 - **Start Command**: `npm start` (equivale a `node index.js`)
-- **Environment variables**: `RESEND_API_KEY`, `CONTACT_EMAIL` y `FRONTEND_URL` con la URL del frontend. `PORT` no hace falta: Render lo define automáticamente y el servidor ya escucha en `process.env.PORT || 5000`.
+- **Environment variables**: `RESEND_API_KEY`, `CONTACT_EMAIL`, `FRONTEND_URL` con la URL del frontend, `ADMIN_PASSWORD`, `JWT_SECRET` y `CLOUDINARY_*`. `PORT` no hace falta: Render lo define automáticamente y el servidor ya escucha en `process.env.PORT || 5000`.
 
-Si el frontend se despliega como Static Site en Render: Build Command `npm run build`, Publish Directory `dist`, y variable `VITE_API_URL` apuntando a la URL del backend. Para que el backend acepte las peticiones, añade esa URL del frontend a `FRONTEND_URL`.
+Si el frontend se despliega en **Cloudflare Pages**: Build Command `npm run build`, Output Directory `dist`, y variables `VITE_API_URL` (URL de Render) y, si quieres cambiar la ruta privada, `VITE_ADMIN_PATH`. Para que el backend acepte las peticiones, añade el dominio `*.pages.dev` a `FRONTEND_URL`. Cloudflare sirve `index.html` en rutas desconocidas, por lo que `/gestion-carta` funciona también al recargar con F5.
 
 ## Arquitectura
 
 - **SPA (React)**: `App.tsx` compone la página con `SEO`, `Navbar`, secciones (`Hero`, `About`, `Menu`, `Extras`, `Gallery`, `Contact`) y `Footer`. El contenido se apoya en `src/data` y la internacionalización en `src/i18n`. Incluye animaciones con Framer Motion y utilidades como `Reveal` y `ScrollToTop`.
 - **API de contacto**: servicio Express independiente, sin persistencia, encargado de validar la solicitud y reenviar el mensaje por correo mediante Resend.
-- **Integración en producción**: Nginx actúa como punto de entrada: sirve los assets estáticos del frontend y redirige las peticiones `/api/*` al backend, separando la entrega de la web del envío de correos.
-- **Configuración por entorno/temporada**: el frontend admite variables `VITE_*` en tiempo de build (p. ej. temporada y URL base de la API) para adaptar contenido y configuración de despliegue.
+- **Integración en producción**: Cloudflare Pages sirve el `dist/` estático y Render expone la API REST; el frontend apunta a `VITE_API_URL`. (En el despliegue Docker alternativo, Nginx actúa como punto de entrada y redirige `/api/*` al backend.)
+- **Carta gestionada desde el panel**: `Menu.tsx` consume `GET /menu`, por lo que cambiar imágenes no requiere editar código ni reconstruir el frontend. Con Cloudinary configurado, la configuración y las imágenes persisten en Render; sin él, se usa disco local para pruebas.
+- **Configuración por entorno**: el frontend admite variables `VITE_*` en tiempo de build (URL de la API y ruta del panel). La selección de imágenes de carta se gestiona desde el panel admin, no por variables de temporada.
