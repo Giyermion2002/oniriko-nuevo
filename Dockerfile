@@ -3,12 +3,10 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Define build arguments for Vite environment variables
-ARG VITE_CURRENT_SEASON
+# Define build argument for the Vite API URL
 ARG VITE_API_URL
 
-# Make them available as environment variables during build
-ENV VITE_CURRENT_SEASON=$VITE_CURRENT_SEASON
+# Make it available as an environment variable during build
 ENV VITE_API_URL=$VITE_API_URL
 
 COPY package*.json ./
