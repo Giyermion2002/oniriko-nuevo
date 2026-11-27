@@ -1,4 +1,5 @@
-import type { FC } from "react";
+import { lazy, Suspense, type FC } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
@@ -10,7 +11,10 @@ import { Extras } from "./sections/Extras";
 import { Gallery } from "./sections/Gallery";
 import { Contact } from "./sections/Contact";
 
-const App: FC = () => {
+const AdminMenuPage = lazy(() => import("./pages/AdminMenuPage"));
+const ADMIN_PATH = import.meta.env.VITE_ADMIN_PATH || "/gestion-carta";
+
+const LandingPage: FC = () => {
   return (
     <>
       <SEO />
@@ -25,6 +29,25 @@ const App: FC = () => {
       </main>
       <Footer />
     </>
+  );
+};
+
+const App: FC = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path={ADMIN_PATH}
+          element={
+            <Suspense fallback={<div className="min-h-screen bg-cream-50" />}>
+              <AdminMenuPage />
+            </Suspense>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
