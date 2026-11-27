@@ -9,10 +9,10 @@ import { API_BASE_URL, resolveMediaUrl, type MenuItem } from "../lib/api";
 
 const FALLBACK_MENU_IMAGES: MenuItem[] = [
   {
-    id: "temporada",
-    label: "Carta de temporada",
-    alt: "Carta de temporada Oníriko",
-    url: `/img/menu/${import.meta.env.VITE_CURRENT_SEASON || "verano"}/carta.jpeg`,
+    id: "carta-0",
+    label: "Carta 1",
+    alt: "Carta Oníriko",
+    url: "/img/menu/verano/carta.jpeg",
     updatedAt: 1,
   },
   {
