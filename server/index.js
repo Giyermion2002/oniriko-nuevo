@@ -3,6 +3,8 @@ const cors = require('cors');
 const { Resend } = require('resend');
 require('dotenv').config();
 
+const menuRouter = require('./routes/menu');
+
 const app = express();
 
 // FRONTEND_URL: orígenes separados por comas, con trim.
@@ -12,13 +14,18 @@ const configuredOrigins = (process.env.FRONTEND_URL || '')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
-const corsOptions =
-  configuredOrigins.length === 0 || configuredOrigins.includes('*')
-    ? { origin: '*' }
-    : { origin: configuredOrigins };
+const corsOptions = {
+  origin:
+    configuredOrigins.length === 0 || configuredOrigins.includes('*')
+      ? '*'
+      : configuredOrigins,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(menuRouter);
 
 const PORT = process.env.PORT || 5000;
 
